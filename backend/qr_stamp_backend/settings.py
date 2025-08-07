@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'stamps',  # QR 스탬프 투어 앱
 ]
 
 MIDDLEWARE = [
