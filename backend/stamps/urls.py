@@ -18,4 +18,9 @@ urlpatterns = [
     
     # QR 스캔 통합 API (가장 중요한 엔드포인트)
     path('scan/', views.scan_qr, name='scan_qr'),
+    
+    # 관리자용 API
+    path('admin/statistics/', views.admin_statistics, name='admin_statistics'),
+    path('admin/gift-eligible/', views.gift_eligible_participants, name='gift_eligible_participants'),
+    path('admin/health-check/', views.system_health_check, name='system_health_check'),
 ]

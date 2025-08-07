@@ -88,5 +88,80 @@ def test_apis():
     print("\n" + "=" * 50)
     print("🎉 API 테스트 완료!")
 
+
+def test_day4_apis():
+    """
+    4일차 추가 API 테스트
+    - 관리자용 통계 API
+    - 기념품 수령 대상자 API
+    - 시스템 상태 체크 API
+    """
+    base_url = 'http://localhost:8000/api'
+    
+    print("🔧 4일차: 고급 API 기능 테스트")
+    print("=" * 50)
+    
+    # 1. 관리자 통계 API 테스트
+    print("\n📊 1. 관리자 통계 API 테스트")
+    try:
+        response = requests.get(f'{base_url}/admin/statistics/')
+        if response.status_code == 200:
+            result = response.json()
+            stats = result['data']
+            print("✅ 성공! 관리자 통계 조회")
+            print(f"   전체 참여자: {stats['summary']['total_participants']}명")
+            print(f"   완주자: {stats['summary']['completed_participants']}명")
+            print(f"   완주율: {stats['summary']['completion_rate']}%")
+            print(f"   부스 통계: {len(stats['booth_statistics'])}개 부스")
+            print(f"   시간별 통계: {len(stats['hourly_statistics'])}시간 데이터")
+        else:
+            print(f"❌ 실패: {response.status_code}")
+    except Exception as e:
+        print(f"❌ 연결 실패: {e}")
+    
+    # 2. 기념품 수령 대상자 API 테스트
+    print("\n🎁 2. 기념품 수령 대상자 API 테스트")
+    try:
+        response = requests.get(f'{base_url}/admin/gift-eligible/')
+        if response.status_code == 200:
+            result = response.json()
+            eligible_data = result['data']
+            print(f"✅ 성공! 기념품 수령 대상자 조회")
+            print(f"   대상자 수: {eligible_data['total_eligible']}명")
+            
+            if eligible_data['total_eligible'] > 0:
+                first_participant = eligible_data['participants'][0]
+                print(f"   첫 번째 완주자: {first_participant['participant_id'][:8]}...")
+                print(f"   완주 시간: {first_participant['completion_duration']}분 소요")
+        else:
+            print(f"❌ 실패: {response.status_code}")
+    except Exception as e:
+        print(f"❌ 연결 실패: {e}")
+    
+    # 3. 시스템 상태 체크 API 테스트
+    print("\n🔍 3. 시스템 상태 체크 API 테스트")
+    try:
+        response = requests.get(f'{base_url}/admin/health-check/')
+        if response.status_code == 200:
+            result = response.json()
+            health = result['data']
+            print("✅ 성공! 시스템 상태 조회")
+            print(f"   상태: {health['status']}")
+            print(f"   데이터베이스: {health['database']}")
+            print(f"   응답시간: {health['response_time_ms']}ms")
+            print(f"   총 스탬프 수집: {health['statistics']['total_stamps_collected']}개")
+        else:
+            print(f"❌ 실패: {response.status_code}")
+    except Exception as e:
+        print(f"❌ 연결 실패: {e}")
+    
+    print("\n" + "=" * 50)
+    print("🎆 4일차 고급 API 테스트 완료!")
+
+
 if __name__ == '__main__':
+    # 기본 API 테스트 실행
     test_apis()
+    
+    # 4일차 추가 API 테스트 실행
+    test_day4_apis()
