@@ -1,0 +1,59 @@
+# 환경변수 파일
+.env
+*.env
+
+# Python 관련
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django 관련
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# 가상환경
+backend/venv/
+backend/env/
+
+# Node.js 관련
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/lerna-debug.log*
+frontend/.pnpm-debug.log*
+
+# React 빌드
+frontend/build/
+frontend/dist/
+
+# 에디터 관련
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 운영체제 관련
+.DS_Store
+Thumbs.db
