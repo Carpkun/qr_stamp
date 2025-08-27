@@ -1,0 +1,238 @@
+/* 기본 앱 스타일 */
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+}
+
+/* 모바일 최적화 */
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* 터치 친화적 버튼 최소 크기 */
+button, .MuiButton-root {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* QR 스캐너 카메라 최적화 */
+.qr-scanner-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* 스크롤 부드럽게 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 키보드 올라올 때 뷰포트 문제 해결 */
+@supports (-webkit-touch-callout: none) {
+  .ios-safari-fix {
+    height: -webkit-fill-available;
+  }
+}
+
+/* 반응형 타이포그래피 */
+@media (max-width: 600px) {
+  h1, .MuiTypography-h1 {
+    font-size: 1.8rem !important;
+  }
+  
+  h2, .MuiTypography-h2 {
+    font-size: 1.6rem !important;
+  }
+  
+  h3, .MuiTypography-h3 {
+    font-size: 1.4rem !important;
+  }
+  
+  h4, .MuiTypography-h4 {
+    font-size: 1.3rem !important;
+  }
+  
+  h5, .MuiTypography-h5 {
+    font-size: 1.2rem !important;
+  }
+  
+  /* 버튼 크기 조정 */
+  .MuiButton-sizeLarge {
+    padding: 12px 24px !important;
+    font-size: 1rem !important;
+  }
+  
+  /* 카드 패딩 조정 */
+  .MuiCard-root {
+    margin: 8px !important;
+  }
+  
+  .MuiCardContent-root {
+    padding: 16px !important;
+  }
+}
+
+/* 극소형 화면 (Galaxy Fold 등) */
+@media (max-width: 360px) {
+  .MuiContainer-root {
+    padding: 8px !important;
+  }
+  
+  .MuiTypography-body1 {
+    font-size: 0.9rem !important;
+  }
+  
+  .MuiTypography-body2 {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* 가로 모드 최적화 */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  .landscape-optimize {
+    padding: 8px 16px !important;
+  }
+  
+  .landscape-optimize h1,
+  .landscape-optimize .MuiTypography-h4 {
+    font-size: 1.5rem !important;
+    margin-bottom: 8px !important;
+  }
+  
+  .landscape-optimize .MuiCard-root {
+    margin: 4px 0 !important;
+  }
+}
+
+/* 접근성 향상 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+  .MuiCard-root {
+    border: 2px solid #000 !important;
+  }
+  
+  .MuiButton-outlined {
+    border-width: 2px !important;
+  }
+}
+
+/* PWA 최적화 */
+@media screen and (display-mode: standalone) {
+  .pwa-safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* 터치 스크롤 개선 */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* 로딩 스피너 중앙 정렬 */
+.loading-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+/* 에러 상태 스타일 */
+.error-container {
+  padding: 20px;
+  text-align: center;
+  color: #d32f2f;
+}
+
+/* 성공 상태 스타일 */
+.success-container {
+  padding: 20px;
+  text-align: center;
+  color: #2e7d32;
+}
+
+/* 부드러운 그라데이션 배경 */
+.gradient-background {
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 25%,
+    #f093fb 50%,
+    #764ba2 75%,
+    #667eea 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 카드 호버 효과 */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* 글자 선택 방지 (터치 디바이스) */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 스크린 리더 전용 텍스트 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

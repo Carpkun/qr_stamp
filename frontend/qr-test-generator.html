@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR 코드 테스트 생성기</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .qr-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 10px auto;
+            border: 1px solid #ddd;
+        }
+        .booth-info {
+            margin-top: 10px;
+        }
+        .booth-code {
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .url {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+        .test-urls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .test-urls h3 {
+            color: #333;
+        }
+        .test-urls ul {
+            list-style: none;
+            padding: 0;
+        }
+        .test-urls li {
+            background: #f9f9f9;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 제46회 소양강문화제 체험부스 QR 코드</h1>
+        <p>총 17개 부스 테스트용 QR 코드 생성</p>
+    </div>
+
+    <div class="qr-grid" id="qrGrid">
+        <!-- QR 코드들이 여기에 동적으로 생성됩니다 -->
+    </div>
+
+    <div class="test-urls">
+        <h3>📱 테스트 URL 목록</h3>
+        <ul id="urlList">
+            <!-- URL 목록이 여기에 생성됩니다 -->
+        </ul>
+    </div>
+
+    <div class="instructions">
+        <h3>📋 테스트 방법</h3>
+        <ol>
+            <li><strong>데스크톱 테스트</strong>: 위 QR 코드를 스마트폰 카메라로 스캔하여 URL이 올바르게 열리는지 확인</li>
+            <li><strong>모바일 브라우저 테스트</strong>: 스마트폰에서 직접 URL을 입력하여 접속</li>
+            <li><strong>카메라 권한 테스트</strong>: QR 스캔 페이지에서 카메라 권한이 정상적으로 요청되는지 확인</li>
+            <li><strong>HTTPS 필요</strong>: 실제 스마트폰에서 카메라 기능을 사용하려면 HTTPS 연결이 필요합니다</li>
+        </ol>
+        
+        <h4>🔧 HTTPS 로컬 서버 실행 방법:</h4>
+        <p><code>HTTPS=true npm start</code> (자체 서명 인증서 사용)</p>
+        <p>또는 ngrok을 사용한 터널링: <code>ngrok http 3000</code></p>
+    </div>
+
+    <script>
+        // 부스 정보 (17개)
+        const booths = [
+            { code: 'BOOTH001', name: '전통 차 체험' },
+            { code: 'BOOTH002', name: '한복 체험' },
+            { code: 'BOOTH003', name: '전통 놀이' },
+            { code: 'BOOTH004', name: '서예 체험' },
+            { code: 'BOOTH005', name: '민속공예' },
+            { code: 'BOOTH006', name: '전통 음식' },
+            { code: 'BOOTH007', name: '국악 체험' },
+            { code: 'BOOTH008', name: '전통 춤' },
+            { code: 'BOOTH009', name: '도자기 만들기' },
+            { code: 'BOOTH010', name: '전통 매듭' },
+            { code: 'BOOTH011', name: '한지공예' },
+            { code: 'BOOTH012', name: '전통 떡 만들기' },
+            { code: 'BOOTH013', name: '탈 만들기' },
+            { code: 'BOOTH014', name: '전통 악기' },
+            { code: 'BOOTH015', name: '민화 그리기' },
+            { code: 'BOOTH016', name: '전통 자수' },
+            { code: 'BOOTH017', name: '전통 염색' }
+        ];
+
+        // QR 코드 생성 함수
+        async function generateQRCodes() {
+            const qrGrid = document.getElementById('qrGrid');
+            const urlList = document.getElementById('urlList');
+            
+            // 기본 URL (HTTPS용과 HTTP용 모두)
+            const baseURLs = [
+                'https://localhost:3000/stamp?booth=',
+                'http://localhost:3000/stamp?booth='
+            ];
+
+            for (const booth of booths) {
+                // QR 카드 생성
+                const qrCard = document.createElement('div');
+                qrCard.className = 'qr-card';
+
+                // QR 코드 캔버스 생성
+                const qrCanvas = document.createElement('canvas');
+                qrCanvas.className = 'qr-code';
+
+                // HTTPS URL 사용 (실제 모바일 테스트용)
+                const qrURL = `https://localhost:3000/stamp?booth=${booth.code}`;
+                
+                try {
+                    await QRCode.toCanvas(qrCanvas, qrURL, {
+                        width: 150,
+                        height: 150,
+                        margin: 2,
+                        color: {
+                            dark: '#000000',
+                            light: '#FFFFFF'
+                        }
+                    });
+
+                    qrCard.innerHTML = `
+                        <div class="booth-info">
+                            <div class="booth-code">${booth.code}</div>
+                            <div style="font-size: 14px; margin-top: 5px;">${booth.name}</div>
+                        </div>
+                        <div class="url">
+                            HTTPS: ${qrURL}<br>
+                            HTTP: http://localhost:3000/stamp?booth=${booth.code}
+                        </div>
+                    `;
+                    
+                    qrCard.insertBefore(qrCanvas, qrCard.firstChild);
+                    qrGrid.appendChild(qrCard);
+
+                } catch (error) {
+                    console.error(`QR 코드 생성 실패 for ${booth.code}:`, error);
+                    qrCard.innerHTML = `
+                        <div class="booth-info">
+                            <div class="booth-code">${booth.code}</div>
+                            <div style="color: red;">QR 생성 실패</div>
+                        </div>
+                    `;
+                    qrGrid.appendChild(qrCard);
+                }
+
+                // URL 목록에 추가
+                const listItem = document.createElement('li');
+                listItem.textContent = `${booth.code}: ${qrURL}`;
+                urlList.appendChild(listItem);
+            }
+        }
+
+        // 페이지 로드 시 QR 코드 생성
+        window.addEventListener('load', generateQRCodes);
+    </script>
+</body>
+</html>

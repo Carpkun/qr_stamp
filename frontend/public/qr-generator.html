@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 부스별 QR 코드 생성기 - 단축 URL 없음!</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        .generator {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .generator input, .generator select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .generate-btn:hover {
+            background: #5a6fd8;
+        }
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .qr-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .qr-code {
+            margin: 10px auto;
+            border: 1px solid #ddd;
+        }
+        .booth-info {
+            margin-top: 10px;
+        }
+        .booth-code {
+            font-weight: bold;
+            color: #2196F3;
+            font-size: 18px;
+        }
+        .booth-name {
+            color: #333;
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+    <!-- QRCode 라이브러리 - 여러 CDN 시도 -->
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // QRCode 라이브러리 로드 확인 및 fallback
+        console.log('QRCode 라이브러리 상태:', typeof QRCode);
+        
+        if (typeof QRCode === 'undefined') {
+            console.log('첫 번째 CDN 실패, 두 번째 CDN 시도...');
+            const fallbackScript = document.createElement('script');
+            fallbackScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+            fallbackScript.onload = function() {
+                console.log('Fallback 라이브러리 로드 완료');
+                // QRCode 객체가 없는 경우 대체 생성 함수 제공
+                if (typeof QRCode === 'undefined') {
+                    window.useAlternativeQR = true;
+                    console.log('대체 QR 생성 방법 사용');
+                }
+            };
+            fallbackScript.onerror = function() {
+                console.error('모든 CDN 로드 실패 - 대체 방법 사용');
+                window.useAlternativeQR = true;
+            };
+            document.head.appendChild(fallbackScript);
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 QR 스탬프 시스템</h1>
+        <h2>부스별 QR 코드 생성기</h2>
+        <p>단축 URL 없이 정확한 원본 URL을 QR 코드로 생성합니다</p>
+    </div>
+
+    <div class="warning">
+        <h3>⚠️ 중요 안내</h3>
+        <p>이 생성기는 <strong>단축 URL을 생성하지 않습니다</strong>. 원본 URL이 그대로 QR 코드에 포함되어 스마트폰 앱에서 정확히 인식됩니다.</p>
+    </div>
+
+    <div class="generator">
+        <h3>🔗 현재 설정</h3>
+        <input type="text" id="baseUrl" placeholder="Localtunnel URL" value="https://polite-eagles-post.loca.lt">
+        <input type="text" id="password" placeholder="접속 패스워드" value="106.251.74.198" readonly>
+        
+        <h3>📱 QR 코드 생성</h3>
+        <select id="boothSelect">
+            <option value="">-- 부스 선택 --</option>
+            <option value="art1">art1 - 요술 풍선 / 페이스 페인팅</option>
+            <option value="art2">art2 - 비누방울 놀이터</option>
+            <option value="art3">art3 - 춘천 스케치 컬러링</option>
+            <option value="art4">art4 - 귀여운 캐리커쳐</option>
+            <option value="art5">art5 - 함께 놀자! 세계 친구들!</option>
+            <option value="art6">art6 - 부채 만들기</option>
+            <option value="folk1">folk1 - 콩콩! 떡메체험</option>
+            <option value="folk2">folk2 - 함께 해요! 민속놀이</option>
+            <option value="folk3">folk3 - 두 손으로 엮는 짚풀공예</option>
+            <option value="folk4">folk4 - 차 한 잔! 전통을 담다</option>
+            <option value="folk5">folk5 - 한복 입고 찰칵!</option>
+            <option value="life1">life1 - 달콤 구름 솜사탕</option>
+            <option value="life2">life2 - 소방 안전 체험</option>
+            <option value="life3">life3 - 웃음 충전! 스트레스 방전!</option>
+            <option value="life4">life4 - 봉황! 따뜻한 커피 한 잔</option>
+            <option value="life5">life5 - 추억의 네컷 포토부스</option>
+            <option value="life6">life6 - 지구촌 동물 친구 탐험</option>
+        </select>
+        
+        <button class="generate-btn" onclick="generateSingleQR()">선택한 부스 QR 코드 생성</button>
+        <button class="generate-btn" onclick="generateAllQR()">모든 부스 QR 코드 생성</button>
+    </div>
+
+    <div class="qr-grid" id="qrGrid">
+        <!-- QR 코드들이 여기에 생성됩니다 -->
+    </div>
+
+    <script>
+        const booths = {
+            'art1': '요술 풍선 / 페이스 페인팅',
+            'art2': '비누방울 놀이터',
+            'art3': '춘천 스케치 컬러링',
+            'art4': '귀여운 캐리커쳐',
+            'art5': '함께 놀자! 세계 친구들!',
+            'art6': '부채 만들기',
+            'folk1': '콩콩! 떡메체험',
+            'folk2': '함께 해요! 민속놀이',
+            'folk3': '두 손으로 엮는 짚풀공예',
+            'folk4': '차 한 잔! 전통을 담다',
+            'folk5': '한복 입고 찰칵!',
+            'life1': '달콤 구름 솜사탕',
+            'life2': '소방 안전 체험',
+            'life3': '웃음 충전! 스트레스 방전!',
+            'life4': '봉황! 따뜻한 커피 한 잔',
+            'life5': '추억의 네컷 포토부스',
+            'life6': '지구촌 동물 친구 탐험'
+        };
+
+        function generateSingleQR() {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            const selectedBooth = document.getElementById('boothSelect').value;
+            
+            if (!baseUrl) {
+                alert('Localtunnel URL을 입력해주세요!');
+                return;
+            }
+            
+            if (!selectedBooth) {
+                alert('부스를 선택해주세요!');
+                return;
+            }
+            
+            document.getElementById('qrGrid').innerHTML = '';
+            generateQRForBooth(selectedBooth, baseUrl);
+        }
+
+        function generateAllQR() {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            
+            if (!baseUrl) {
+                alert('Localtunnel URL을 입력해주세요!');
+                return;
+            }
+            
+            document.getElementById('qrGrid').innerHTML = '';
+            
+            Object.keys(booths).forEach(boothCode => {
+                generateQRForBooth(boothCode, baseUrl);
+            });
+        }
+
+        async function generateQRForBooth(boothCode, baseUrl) {
+            console.log(`🔄 QR 코드 생성 시작: ${boothCode}`);
+            
+            const qrGrid = document.getElementById('qrGrid');
+            
+            // QR 카드 생성
+            const qrCard = document.createElement('div');
+            qrCard.className = 'qr-card';
+            
+            // 실제 URL 생성 (단축 없음!)
+            const qrURL = `${baseUrl}/stamp?booth=${boothCode}`;
+            console.log(`🔗 생성할 URL: ${qrURL}`);
+            
+            // QRCode 라이브러리 체크
+            if (typeof QRCode === 'undefined') {
+                console.error('❌ QRCode 라이브러리가 로드되지 않았습니다!');
+                qrCard.innerHTML = `
+                    <div class="booth-info">
+                        <div class="booth-code">${boothCode}</div>
+                        <div style="color: red;">QRCode 라이브러리 로드 실패</div>
+                    </div>
+                `;
+                qrGrid.appendChild(qrCard);
+                return;
+            }
+            
+            try {
+                // QR 코드 캔버스 생성
+                const qrCanvas = document.createElement('canvas');
+                qrCanvas.className = 'qr-code';
+                qrCanvas.id = `qr-${boothCode}`;
+                qrCanvas.width = 250;
+                qrCanvas.height = 250;
+                
+                console.log(`📝 QRCode.toCanvas 호출 시작...`);
+                
+                await QRCode.toCanvas(qrCanvas, qrURL, {
+                    width: 250,
+                    height: 250,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    },
+                    errorCorrectionLevel: 'M'
+                });
+                
+                console.log(`✅ QRCode.toCanvas 성공`);
+                
+                qrCard.innerHTML = `
+                    <div class="booth-info">
+                        <div class="booth-code">${boothCode}</div>
+                        <div class="booth-name">${booths[boothCode]}</div>
+                        <div style="font-size: 12px; color: #666; margin: 10px 0; word-break: break-all;">
+                            ${qrURL}
+                        </div>
+                        <button class="download-btn" onclick="downloadQR('${boothCode}')">📥 다운로드</button>
+                    </div>
+                `;
+                
+                qrCard.insertBefore(qrCanvas, qrCard.firstChild);
+                qrGrid.appendChild(qrCard);
+                
+                console.log(`🎉 QR 코드 생성 완료: ${boothCode}`);
+                
+            } catch (error) {
+                console.error(`❌ QR 코드 생성 실패: ${boothCode}`, error);
+                qrCard.innerHTML = `
+                    <div class="booth-info">
+                        <div class="booth-code">${boothCode}</div>
+                        <div style="color: red;">QR 생성 실패: ${error.message}</div>
+                        <div style="font-size: 12px; color: #666;">URL: ${qrURL}</div>
+                    </div>
+                `;
+                qrGrid.appendChild(qrCard);
+            }
+        }
+
+        function downloadQR(boothCode) {
+            const canvas = document.getElementById(`qr-${boothCode}`);
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = `QR_${boothCode}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            }
+        }
+
+        // 페이지 로드 시 첫 번째 부스 자동 생성
+        window.addEventListener('load', () => {
+            document.getElementById('boothSelect').value = 'art1';
+            generateSingleQR();
+        });
+    </script>
+</body>
+</html>

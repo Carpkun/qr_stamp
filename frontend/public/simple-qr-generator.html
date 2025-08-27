@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 간단 QR 코드 생성기</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        .generator {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .generator input, .generator select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .generate-btn:hover {
+            background: #5a6fd8;
+        }
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .qr-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .qr-code {
+            margin: 10px auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            background: white;
+        }
+        .booth-info {
+            margin-top: 15px;
+        }
+        .booth-code {
+            font-weight: bold;
+            color: #2196F3;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .booth-name {
+            color: #333;
+            margin: 5px 0 15px 0;
+            font-weight: 500;
+        }
+        .booth-url {
+            font-size: 12px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .copy-btn {
+            background: #FF9800;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .copy-btn:hover {
+            background: #F57C00;
+        }
+        .warning {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 QR 스탬프 시스템</h1>
+        <h2>간단 QR 코드 URL 생성기</h2>
+        <p>외부 서비스 없이 로컬에서 QR 코드 URL을 생성합니다</p>
+    </div>
+
+    <div class="warning">
+        <h3>📱 사용 방법</h3>
+        <ol>
+            <li>부스를 선택하고 <strong>"QR 코드 URL 생성"</strong> 버튼을 클릭</li>
+            <li>생성된 <strong>QR Code API URL</strong>을 복사</li>
+            <li>브라우저 새 탭에서 해당 URL을 열면 <strong>QR 코드 이미지</strong>가 표시됩니다</li>
+            <li>QR 코드 이미지를 <strong>우클릭 → 이미지 저장</strong>으로 다운로드</li>
+            <li>또는 <strong>네이버/다음 QR 코드 생성기</strong>에 부스 URL을 직접 입력해도 됩니다</li>
+        </ol>
+    </div>
+
+    <div class="generator">
+        <h3>🔗 현재 설정</h3>
+        <input type="text" id="baseUrl" placeholder="Localtunnel URL" value="https://polite-eagles-post.loca.lt">
+        <input type="text" id="password" placeholder="접속 패스워드" value="106.251.74.198" readonly>
+        
+        <h3>📱 부스 선택</h3>
+        <select id="boothSelect">
+            <option value="">-- 부스 선택 --</option>
+            <option value="art1">art1 - 요술 풍선 / 페이스 페인팅</option>
+            <option value="art2">art2 - 비누방울 놀이터</option>
+            <option value="art3">art3 - 춘천 스케치 컬러링</option>
+            <option value="art4">art4 - 귀여운 캐리커쳐</option>
+            <option value="art5">art5 - 함께 놀자! 세계 친구들!</option>
+            <option value="art6">art6 - 부채 만들기</option>
+            <option value="folk1">folk1 - 콩콩! 떡메체험</option>
+            <option value="folk2">folk2 - 함께 해요! 민속놀이</option>
+            <option value="folk3">folk3 - 두 손으로 엮는 짚풀공예</option>
+            <option value="folk4">folk4 - 차 한 잔! 전통을 담다</option>
+            <option value="folk5">folk5 - 한복 입고 찰칵!</option>
+            <option value="life1">life1 - 달콤 구름 솜사탕</option>
+            <option value="life2">life2 - 소방 안전 체험</option>
+            <option value="life3">life3 - 웃음 충전! 스트레스 방전!</option>
+            <option value="life4">life4 - 봉황! 따뜻한 커피 한 잔</option>
+            <option value="life5">life5 - 추억의 네컷 포토부스</option>
+            <option value="life6">life6 - 지구촌 동물 친구 탐험</option>
+        </select>
+        
+        <button class="generate-btn" onclick="generateSingleQR()">선택한 부스 QR 코드 URL 생성</button>
+        <button class="generate-btn" onclick="generateAllQR()">모든 부스 QR 코드 URL 생성</button>
+    </div>
+
+    <div class="qr-grid" id="qrGrid">
+        <!-- QR 코드 URL들이 여기에 생성됩니다 -->
+    </div>
+
+    <script>
+        const booths = {
+            'art1': '요술 풍선 / 페이스 페인팅',
+            'art2': '비누방울 놀이터',
+            'art3': '춘천 스케치 컬러링',
+            'art4': '귀여운 캐리커쳐',
+            'art5': '함께 놀자! 세계 친구들!',
+            'art6': '부채 만들기',
+            'folk1': '콩콩! 떡메체험',
+            'folk2': '함께 해요! 민속놀이',
+            'folk3': '두 손으로 엮는 짚풀공예',
+            'folk4': '차 한 잔! 전통을 담다',
+            'folk5': '한복 입고 찰칵!',
+            'life1': '달콤 구름 솜사탕',
+            'life2': '소방 안전 체험',
+            'life3': '웃음 충전! 스트레스 방전!',
+            'life4': '봉황! 따뜻한 커피 한 잔',
+            'life5': '추억의 네컷 포토부스',
+            'life6': '지구촌 동물 친구 탐험'
+        };
+
+        function generateSingleQR() {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            const selectedBooth = document.getElementById('boothSelect').value;
+            
+            if (!baseUrl) {
+                alert('Localtunnel URL을 입력해주세요!');
+                return;
+            }
+            
+            if (!selectedBooth) {
+                alert('부스를 선택해주세요!');
+                return;
+            }
+            
+            document.getElementById('qrGrid').innerHTML = '';
+            generateQRForBooth(selectedBooth, baseUrl);
+        }
+
+        function generateAllQR() {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            
+            if (!baseUrl) {
+                alert('Localtunnel URL을 입력해주세요!');
+                return;
+            }
+            
+            document.getElementById('qrGrid').innerHTML = '';
+            
+            Object.keys(booths).forEach(boothCode => {
+                generateQRForBooth(boothCode, baseUrl);
+            });
+        }
+
+        function generateQRForBooth(boothCode, baseUrl) {
+            console.log(`🔄 QR URL 생성 시작: ${boothCode}`);
+            
+            const qrGrid = document.getElementById('qrGrid');
+            
+            // 부스별 실제 URL 생성
+            const boothURL = `${baseUrl}/stamp?booth=${boothCode}`;
+            
+            // 여러 QR 코드 생성 서비스 URL들
+            const qrServices = [
+                {
+                    name: "QR Server API",
+                    url: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(boothURL)}`,
+                    description: "가장 안정적인 QR 코드 생성 서비스"
+                },
+                {
+                    name: "Quick Chart QR",
+                    url: `https://quickchart.io/qr?text=${encodeURIComponent(boothURL)}&size=250`,
+                    description: "빠른 QR 코드 생성"
+                },
+                {
+                    name: "QRCode Monkey URL",
+                    url: `https://www.qrcode-monkey.com/#url`,
+                    description: "수동 입력 필요 (부스 URL 복사해서 붙여넣기)"
+                }
+            ];
+            
+            // QR 카드 생성
+            const qrCard = document.createElement('div');
+            qrCard.className = 'qr-card';
+            
+            let cardHTML = `
+                <div class="booth-info">
+                    <div class="booth-code">${boothCode}</div>
+                    <div class="booth-name">${booths[boothCode]}</div>
+                    <div class="booth-url">
+                        <strong>부스 URL:</strong><br>
+                        ${boothURL}
+                        <button class="copy-btn" onclick="copyToClipboard('${boothURL}', this)">📋 부스 URL 복사</button>
+                    </div>
+                </div>
+                <hr>
+                <h4>🎯 QR 코드 생성 옵션들:</h4>
+            `;
+            
+            qrServices.forEach((service, index) => {
+                const serviceId = `${boothCode}-service-${index}`;
+                
+                if (service.name === "QRCode Monkey URL") {
+                    cardHTML += `
+                        <div style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+                            <strong>${service.name}</strong><br>
+                            <small>${service.description}</small><br>
+                            <button class="copy-btn" onclick="window.open('${service.url}', '_blank')">🌐 사이트 열기</button>
+                        </div>
+                    `;
+                } else {
+                    cardHTML += `
+                        <div style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+                            <strong>${service.name}</strong><br>
+                            <small>${service.description}</small><br>
+                            <div style="font-size: 11px; color: #666; margin: 5px 0; word-break: break-all;">
+                                ${service.url}
+                            </div>
+                            <button class="copy-btn" onclick="copyToClipboard('${service.url}', this)">📋 QR URL 복사</button>
+                            <button class="copy-btn" onclick="window.open('${service.url}', '_blank')">🖼️ QR 이미지 보기</button>
+                        </div>
+                    `;
+                }
+            });
+            
+            qrCard.innerHTML = cardHTML;
+            qrGrid.appendChild(qrCard);
+            
+            console.log(`✅ QR URL 생성 완료: ${boothCode}`);
+        }
+
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = '✅ 복사됨!';
+                button.style.background = '#4CAF50';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            }).catch(function(err) {
+                alert('복사 실패: ' + err);
+            });
+        }
+
+        // 페이지 로드 시 첫 번째 부스 자동 생성
+        window.addEventListener('load', () => {
+            document.getElementById('boothSelect').value = 'art1';
+            generateSingleQR();
+        });
+    </script>
+</body>
+</html>

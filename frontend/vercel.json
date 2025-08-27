@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "outputDirectory": "build",
+  "env": {
+    "REACT_APP_API_URL": "https://ccculture.pythonanywhere.com/api",
+    "REACT_APP_NAME": "QR Stamp Tour",
+    "REACT_APP_VERSION": "1.0.0"
+  },
+  "build": {
+    "env": {
+      "REACT_APP_API_URL": "https://ccculture.pythonanywhere.com/api"
+    }
+  }
+}
