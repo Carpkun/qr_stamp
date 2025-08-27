@@ -1,0 +1,29 @@
+# QR 스탬프 투어 백엔드 의존성
+# PythonAnywhere 배포용
+
+# Django 코어
+Django==5.2.5
+djangorestframework==3.16.1
+
+# 데이터베이스
+mysqlclient==2.2.7
+
+# CORS 처리
+django-cors-headers==4.7.0
+
+# 환경변수 관리
+python-dotenv==1.1.1
+
+# HTTP 요청
+requests==2.32.4
+
+# 기타 의존성
+asgiref==3.9.1
+sqlparse==0.5.3
+tzdata==2025.2
+
+# SSL 및 인증서
+certifi==2025.8.3
+urllib3==2.5.0
+idna==3.10
+charset-normalizer==3.4.2

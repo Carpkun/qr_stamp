@@ -30,7 +30,11 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+# ALLOWED_HOSTS 설정 - 개발 환경에서는 모든 호스트 허용
+if DEBUG:
+    ALLOWED_HOSTS = ['*']  # 개발 환경에서는 모든 호스트 허용
+else:
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -131,6 +135,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# 프론트엔드 빌드 파일을 위한 설정
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR.parent, 'frontend', 'build', 'static'),
+]
+
+# React 앱의 index.html을 위한 템플릿 설정
+TEMPLATES[0]['DIRS'].append(os.path.join(BASE_DIR.parent, 'frontend', 'build'))
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -150,3 +163,29 @@ REST_FRAMEWORK = {
 # CORS 설정
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # 개발 환경에서만 모든 origin 허용
+
+# CSRF 설정 - 개발 및 프로덕션 환경
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000', 
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://*.loca.lt',  # 모든 localtunnel 도메인 허용
+    'https://ccculture.pythonanywhere.com',  # PythonAnywhere 도메인
+    'https://qr-stamp-tour.vercel.app',  # Vercel 도메인 (임시)
+]
+
+# 환경 변수로 추가 localtunnel 도메인 설정 (매번 바뀌는 주소 대응)
+localtunnel_domain = os.getenv('LOCALTUNNEL_DOMAIN')
+if localtunnel_domain:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{localtunnel_domain}')
+
+# 프로덕션 환경 보안 설정
+if not DEBUG:
+    # HTTPS 관련 보안 설정
+    SECURE_SSL_REDIRECT = False  # PythonAnywhere에서는 False
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True

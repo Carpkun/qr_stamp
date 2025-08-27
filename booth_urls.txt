@@ -1,0 +1,76 @@
+🎯 제46회 소양강문화제 QR 스탬프 시스템 - 실제 부스별 URL 목록
+
+📍 현재 Localtunnel URL: https://red-pears-notice.loca.lt
+🔑 접속 패스워드: 106.251.74.198
+
+===== 🎨 예술 체험 부스 (6개) =====
+
+art1 (요술 풍선 / 페이스 페인팅)
+https://red-pears-notice.loca.lt/stamp?booth=art1
+
+art2 (비누방울 놀이터)
+https://red-pears-notice.loca.lt/stamp?booth=art2
+
+art3 (춘천 스케치 컬러링)
+https://red-pears-notice.loca.lt/stamp?booth=art3
+
+art4 (귀여운 캐리커쳐)
+https://red-pears-notice.loca.lt/stamp?booth=art4
+
+art5 (함께 놀자! 세계 친구들!)
+https://red-pears-notice.loca.lt/stamp?booth=art5
+
+art6 (부채 만들기)
+https://red-pears-notice.loca.lt/stamp?booth=art6
+
+===== 🏮 전통 민속 체험 부스 (5개) =====
+
+folk1 (콩콩! 떡메체험)
+https://red-pears-notice.loca.lt/stamp?booth=folk1
+
+folk2 (함께 해요! 민속놀이)
+https://red-pears-notice.loca.lt/stamp?booth=folk2
+
+folk3 (두 손으로 엮는 짚풀공예)
+https://red-pears-notice.loca.lt/stamp?booth=folk3
+
+folk4 (차 한 잔! 전통을 담다)
+https://red-pears-notice.loca.lt/stamp?booth=folk4
+
+folk5 (한복 입고 찰칵!)
+https://red-pears-notice.loca.lt/stamp?booth=folk5
+
+===== 🌱 생활 체험 부스 (6개) =====
+
+life1 (달콤 구름 솜사탕)
+https://red-pears-notice.loca.lt/stamp?booth=life1
+
+life2 (소방 안전 체험)
+https://red-pears-notice.loca.lt/stamp?booth=life2
+
+life3 (웃음 충전! 스트레스 방전!)
+https://red-pears-notice.loca.lt/stamp?booth=life3
+
+life4 (봉황! 따뜻한 커피 한 잔)
+https://red-pears-notice.loca.lt/stamp?booth=life4
+
+life5 (추억의 네컷 포토부스)
+https://red-pears-notice.loca.lt/stamp?booth=life5
+
+life6 (지구촌 동물 친구 탐험)
+https://red-pears-notice.loca.lt/stamp?booth=life6
+
+===== 테스트 방법 =====
+
+1. 위 URL 중 테스트할 부스의 URL을 복사
+2. QR 코드 생성 사이트에 접속
+3. URL을 입력하고 QR 코드 이미지 생성
+4. 이미지를 다운로드
+5. 스마트폰으로 다운받은 QR 이미지를 스캔
+
+===== 주의사항 =====
+
+- localtunnel URL이 변경되면 모든 URL을 새로 생성해야 합니다
+- 각 부스는 1번만 방문 가능합니다 (중복 방지)
+- 5개 부스 방문 시 미션 완료됩니다
+- 스마트폰에서 접속 시 패스워드 입력이 필요합니다
