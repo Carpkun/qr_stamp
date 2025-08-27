@@ -205,13 +205,6 @@ const BoothListPage: React.FC = () => {
                       >
                         {booth.name}
                       </Typography>
-                      <Chip 
-                        label={booth.code} 
-                        size="small" 
-                        variant="outlined"
-                        color={booth.visited ? "success" : "default"}
-                        sx={{ ml: 1 }}
-                      />
                     </Box>
                     
                     <Typography variant="body2" color="text.secondary" paragraph sx={{ mb: 1 }}>
