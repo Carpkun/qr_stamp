@@ -259,7 +259,7 @@ const BoothListPage: React.FC = () => {
             <Box component="ul" sx={{ pl: 2, mb: 0 }}>
               <li>각 체험부스에서 QR 코드를 스캔하여 스탬프를 획득하세요</li>
               <li>총 17개 부스 중 5곳을 방문하면 미션 완료!</li>
-              <li>완주 후 운영 본부에서 기념품을 수령하세요</li>
+              <li>완주 후 본부석에서 기념품을 수령하세요</li>
               <li>이미 방문한 부스는 재방문할 수 없습니다</li>
             </Box>
           </Typography>

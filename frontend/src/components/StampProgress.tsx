@@ -55,7 +55,7 @@ const StampProgress: React.FC<StampProgressProps> = ({
           </Typography>
           <Typography variant="body2" align="center" sx={{ mb: 2 }}>
             {isCompleted 
-              ? '축하합니다! 운영 본부에서 기념품을 받으세요!'
+              ? '축하합니다! 본부석에서 기념품을 받으세요!'
               : `${remainingStamps}개의 스탬프가 더 필요합니다`
             }
           </Typography>

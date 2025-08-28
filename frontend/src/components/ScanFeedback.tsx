@@ -152,7 +152,7 @@ const ScanFeedback: React.FC<ScanFeedbackProps> = ({
               🏆 전통문화 체험 스탬프 투어 완주!
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              운영 본부에서 기념품을 받아가세요!
+              본부석에서 기념품을 받아가세요!
             </Typography>
           </Box>
         )}
