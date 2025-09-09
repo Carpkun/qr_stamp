@@ -215,7 +215,7 @@ const CompletePage: React.FC = () => {
               성공적으로 완료하셨습니다!
             </Typography>
             <Typography variant="h6" color="inherit" sx={{ fontWeight: 'bold', fontSize: '1.3rem' }}>
-              🎁 본부석에서 기념품을 수령하세요!
+              🎁 달콤 구름 솜사탕·포토부스에서 특별한 선물을 받아보세요!
             </Typography>
             {participantData?.completed_at && (
               <Typography variant="body2" sx={{ mt: 2, opacity: 0.9 }}>
@@ -282,9 +282,8 @@ const CompletePage: React.FC = () => {
             </Typography>
             <Typography variant="body2" component="div">
               <Box component="ul" sx={{ pl: 2, mb: 0, textAlign: 'left' }}>
-                <li>본부석으로 이동하세요</li>
+                <li>달콤 구름 솜사탕·포토부스로 이동하세요</li>
                 <li>이 화면을 운영진에게 보여주세요</li>
-                <li>기념품을 받고 축제를 계속 즐기세요!</li>
                 <li>소양강문화제에 참여해 주셔서 감사합니다</li>
               </Box>
             </Typography>
