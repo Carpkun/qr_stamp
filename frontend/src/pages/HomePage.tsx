@@ -189,8 +189,8 @@ const HomePage: React.FC = () => {
         />
       )}
 
-      {/* 체험부스 진행 현황 - 간단한 요약 */}
-      {allBooths.length > 0 && (
+      {/* 체험부스 진행 현황 - 간단한 요약 (숨김 처리) */}
+      {false && allBooths.length > 0 && (
         <Card sx={{ mt: 3 }}>
           <CardContent sx={{ textAlign: 'center', py: 3 }}>
             <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
